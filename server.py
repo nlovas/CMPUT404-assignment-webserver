@@ -77,6 +77,7 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 				#if theres no slash at the end, perform a redirect
 				if( path[-1] != '/'):				
 					print "redirecting"
+					print "R: path: %s" % path
 					self.header = "HTTP/1.1 302 Found\r\n"
 					self.request.sendall(self.header + "Location: " + "127.0.0.1:8080"+ path + '/' + '\r\n');
 				#otherwise, send the appropriate index.html
@@ -104,7 +105,7 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 					self.request.sendall(self.header + ptype + psize + '\r\n' + page) 
 				#with open('www/index.html', 'r') as htmlFile:
 				#	content = htmlFile.read()
-			self.request.sendall("OK")
+#			self.request.sendall("OK")
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080
