@@ -66,12 +66,23 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 			#get the files from www/
 			path = "/www"
 			path = path + command[1] #get the location specified
-			###write something here for if it asked for a file thats actually a directory (redirection)
-			##and for fixes
+			
 			#print "path: %s " % os.path.normpath(os.curdir + path)
 			print "path: %s " % os.curdir + path
 
-			#if(os.path.isdir( os.path.normpath(os.curdir + path) )): #check if this path is a directory
+			#for the 'how secure are you?' test
+			#first check if the end of the path has a /
+			valid = False			
+			if( path[-1] == '/'):
+				valid = True
+
+			#then normalize the path
+			path = os.path.normpath(path)
+			#then proceed like usual
+			if(valid == True):
+				path = path + '/'
+
+
 			if(os.path.isdir( os.curdir + path) ): #check if this path is a directory
 				
 				#if theres no slash at the end, perform a redirect
@@ -91,7 +102,7 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 
 				
 			else:
-				#if(os.path.isfile( os.path.normpath(os.curdir + path) )): #check if this path is a file
+				
 				if(os.path.isfile( os.curdir + path) ): #check if this path is a file
 					print "itsa file!"
 
@@ -106,8 +117,7 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 					page = '<!DOCTYPE html><html><head>Error 404 Page Not Found</head></html>'
 					psize = 'Content-Length: ' + str(len(page.encode('utf-8'))) + '\r\n'
 					self.request.sendall(self.header + ptype + psize + '\r\n' + page) 
-				#with open('www/index.html', 'r') as htmlFile:
-				#	content = htmlFile.read()
+
 #			self.request.sendall("OK")
 
 if __name__ == "__main__":
