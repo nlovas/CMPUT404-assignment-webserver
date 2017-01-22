@@ -75,11 +75,14 @@ class MyWebServer(SocketServer.BaseRequestHandler):
 			if(os.path.isdir( os.curdir + path) ): #check if this path is a directory
 				
 				#if theres no slash at the end, perform a redirect
-				if( path[-1] != '/'):				
+				if( path[-1] != '/'):	
+
+					relocation = path.split('/')			
 					print "redirecting"
 					print "R: path: %s" % path
 					self.header = "HTTP/1.1 302 Found\r\n"
-					self.request.sendall(self.header + "Location: " + "127.0.0.1:8080"+ path + '/' + '\r\n');
+					#learned that I only need to send the latter part of the path from looking at Ryan's code. otherwise the redirect is the incorrect URL
+					self.request.sendall(self.header + "Location: " + path[4:] + '/' + '\r\n');
 				#otherwise, send the appropriate index.html
 				else:
 					print "ok directory"
